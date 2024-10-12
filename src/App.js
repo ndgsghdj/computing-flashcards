@@ -1,143 +1,81 @@
-import React, { useState } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
+import React, { useState, useEffect } from 'react';
+import { ThemeProvider, CssBaseline, Container, CircularProgress } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { FlashcardProvider } from './providers/FlashcardProvider';
-import ChapterPage from './pages/ChapterPage';
-import TestPage from './pages/TestPage';
-import TransitionWrapper from './components/TransitionWrapper';
+import Dashboard from './pages/Dashboard'; // Adjust the path if needed
+import ChapterPage from './pages/ChapterPage'; // Adjust the path if needed
+import TestPage from './pages/TestPage'; // Adjust the path if needed
+import TransitionWrapper from './components/TransitionWrapper'; // Adjust the path if needed
+import { useFlashcards } from './providers/FlashcardProvider';
 
-const catppuccinTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#cba6f7',
-      hover: '#d4b5f8', // Add a hover color for primary
-    },
-    secondary: {
-      main: '#f38ba8',
-      hover: '#f59cb0', // Add a hover color for secondary
-    },
-    flashcard: {
-        main: '#f5e0dc'
-    },
-    background: {
-      default: '#1e1e2e',
-      paper: '#302d41',
-    },
-    background_darker: {
-        default: '#302d41'
-    },
-    text: {
-      primary: '#cdd6f4',
-      secondary: '#f5e0dc',
-    },
-  },
-  typography: {
-    fontFamily: `'JetBrains Mono', 'Roboto', sans-serif`,
-    h4: {
-      fontWeight: 600,
-    },
-    h5: {
-      fontWeight: 500,
-    },
-    body1: {
-      fontSize: '1rem',
-      lineHeight: 1.6,
-    },
-    button: {
-      textTransform: 'none',
-      fontWeight: 500,
-    },
-  },
-  shape: {
-    borderRadius: 12,
-  },
-  shadows: [
-    'none',
-    '0px 4px 6px rgba(0, 0, 0, 0.1)',
-  ],
-});
+// Import your theme files
+import catppuccinTheme from './themes/catppuccinTheme'; // Adjust the path if needed
+import gruvboxTheme from './themes/gruvboxTheme'; // Adjust the path if needed
+// Import other themes here as needed
 
-const gruvboxTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#fb4934',
-      hover: '#ff6f61', // Add a hover color for primary
-    },
-    secondary: {
-      main: '#83c992',
-      hover: '#8be6b8', // Add a hover color for secondary
-    },
-    background: {
-      default: '#282828',
-      paper: '#3c3836',
-    },
-    background_darker: {
-        default: '#1d2021'
-    },
-    text: {
-      primary: '#ebdbb2',
-      secondary: '#d5c4a1',
-    },
-  },
-  typography: {
-    fontFamily: `'JetBrains Mono', 'Roboto', sans-serif`,
-    h4: {
-      fontWeight: 600,
-    },
-    h5: {
-      fontWeight: 500,
-    },
-    body1: {
-      fontSize: '1rem',
-      lineHeight: 1.6,
-    },
-    button: {
-      textTransform: 'none',
-      fontWeight: 500,
-    },
-  },
-  shape: {
-    borderRadius: 12,
-  },
-  shadows: [
-    'none',
-    '0px 4px 6px rgba(0, 0, 0, 0.1)',
-  ],
-});
+const App = () => {
+    const themes = {
+        catppuccin: catppuccinTheme,
+        gruvbox: gruvboxTheme,
+        // Add other themes here
+    };
 
+    const { loading } = useFlashcards();
 
-function App() {
-  const [isCatppuccin, setIsCatppuccin] = useState(true);
-  
-  const toggleTheme = () => {
-    setIsCatppuccin(prev => !prev);
-  };
+    const defaultTheme = 'catppuccin'; // Default theme
 
-  const theme = isCatppuccin ? catppuccinTheme : gruvboxTheme;
+    const [currentTheme, setCurrentTheme] = useState(() => {
+        // Check if 'theme' exists in localStorage
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme) {
+            try {
+                // Parse and return the stored theme if it's valid
+                return JSON.parse(storedTheme);
+            } catch (error) {
+                console.error('Error parsing stored theme:', error);
+            }
+        }
+        // Return the default theme if no valid stored theme exists
+        return defaultTheme;
+    });
 
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <FlashcardProvider>
-        <Router>
-          <TransitionWrapper>
-            <Routes>
-              <Route 
-                path="/" 
-                element={<Dashboard toggleTheme={toggleTheme} isCatppuccin={isCatppuccin} />} 
-              />
-              <Route path="/chapter/:chapterName" element={<ChapterPage />} />
-              <Route path="/test/:chapterName" element={<TestPage />} />
-            </Routes>
-          </TransitionWrapper>
-        </Router>
-      </FlashcardProvider>
-    </ThemeProvider>
-  );
-}
+    useEffect(() => {
+        localStorage.setItem('theme', JSON.stringify(currentTheme)); // Save theme to localStorage whenever it changes
+    }, [currentTheme]);
+
+    const toggleTheme = (theme) => {
+        setCurrentTheme(theme);
+    };
+
+    if (loading) {
+        return (
+            <ThemeProvider theme={themes[currentTheme]}>
+            <Container sx={{ padding: "20px", display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                <CircularProgress/>
+            </Container>
+
+            </ThemeProvider>
+        )
+    }
+
+    return (
+        <ThemeProvider theme={themes[currentTheme]}>
+            <CssBaseline />
+                <Router>
+                    <TransitionWrapper>
+                        <Routes>
+                            <Route 
+                                path="/" 
+                                element={<Dashboard toggleTheme={toggleTheme} currentTheme={currentTheme} themes={themes}/>} 
+                            />
+                            <Route path="/chapter/:chapterName" element={<ChapterPage />} />
+                            <Route path="/test/:chapterName" element={<TestPage />} />
+                        </Routes>
+                    </TransitionWrapper>
+                </Router>
+        </ThemeProvider>
+    );
+};
 
 export default App;
 

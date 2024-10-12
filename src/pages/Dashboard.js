@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import { Container, Grid, Card, CardContent, Typography, Box, CircularProgress, Button } from '@mui/material';
+import { Container, Grid, Card, CardContent, Typography, Box, Button, IconButton, } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { useFlashcards } from '../providers/FlashcardProvider';
+import SettingsDialog from '../components/SettingsDialog';
 
 import MemoryIcon from '@mui/icons-material/Memory';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
@@ -16,6 +18,7 @@ import DatasetIcon from '@mui/icons-material/Dataset';
 import DatasetLinkedIcon from '@mui/icons-material/DatasetLinked'; 
 import HubIcon from '@mui/icons-material/Hub';
 
+// Chapter Icons
 const chapterIcons = {
     "Computer Architecture": <MemoryIcon color="primary"/>,
     "Algorithms": <AccountTreeIcon color="primary"/>,
@@ -29,29 +32,33 @@ const chapterIcons = {
     "Excel Theory": <DatasetIcon color="primary"/>,
     "Excel Functions": <DatasetLinkedIcon color="primary"/>,
     "Computer Networks": <HubIcon color="primary"/>
-}
+};
 
-const Dashboard = ({ toggleTheme, isCatppuccin }) => {
-    const { chapters, loading } = useFlashcards();
+const Dashboard = ({ toggleTheme, currentTheme, themes }) => {
+    const { chapters } = useFlashcards();
     const navigate = useNavigate();
     
-    if (loading) {
-        return (
-            <Container sx={{ padding: "20px", display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
-                <CircularProgress/>
-            </Container>
-        );
-    }
+    // Dialog state for Settings Modal
+    const [openSettings, setOpenSettings] = useState(false);
     
+    const handleOpenSettings = () => setOpenSettings(true);
+    const handleCloseSettings = () => setOpenSettings(false);
+
     return (
-        <Container sx={{ padding: "20px" }}>
+        <Container sx={{ padding: "20px", position: 'relative' }}>
+            {/* Settings Button at top-right */}
+            <IconButton 
+                sx={{ position: 'absolute', top: 10, right: 10 }} 
+                onClick={handleOpenSettings}
+                color="primary"
+            >
+                <SettingsIcon />
+            </IconButton>
+
             <Box sx={{ padding: "20px", textAlign: 'center' }}>
                 <Typography variant="h4" component="h1" gutterBottom>
                     Chapters
                 </Typography>
-                <Button variant="contained" onClick={toggleTheme}>
-                    Switch to {isCatppuccin ? 'Gruvbox' : 'Catppuccin'}
-                </Button>
             </Box>
 
             <Grid container spacing={3}>
@@ -80,6 +87,14 @@ const Dashboard = ({ toggleTheme, isCatppuccin }) => {
                     </Grid>
                 ))}
             </Grid>
+
+            <SettingsDialog
+                open={openSettings} 
+                handleCloseSettings={handleCloseSettings} 
+                currentTheme={currentTheme} 
+                toggleTheme={toggleTheme} 
+                themes={themes} // Pass themes to the dialog
+            />
         </Container>
     );
 };

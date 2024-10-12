@@ -12,6 +12,9 @@ import { useFlashcards } from '../providers/FlashcardProvider';
 import { Link } from 'react-router-dom';
 import Flashcard from './Flashcard';
 
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 const ChapterPage = () => {
     const { chapterName } = useParams();  // Get chapter name from URL
     const { chapters } = useFlashcards();  // Access all chapters from the context
@@ -31,6 +34,12 @@ const ChapterPage = () => {
         setIsFlipped(false); // Reset flip state
         setCurrentIndex(prev => (prev + 1) % flashcards.length); // Move to the next card, wrap around
     };
+
+    const handlePrevious = () => {
+        setIsFlipped(false);
+        setCurrentIndex(prev => (prev - 1 + flashcards.length) % flashcards.length); // Wrap around if negative
+    };
+
 
     if (!flashcards) {
         return <Typography variant="h6">Chapter not found</Typography>;
@@ -54,6 +63,9 @@ const ChapterPage = () => {
                 </Box>
             </Box>
 
+        <Box 
+        >
+
             <Flashcard 
                 keyword={flashcards[currentIndex]?.Keyword}
                 definition={flashcards[currentIndex]?.Definition}
@@ -63,10 +75,17 @@ const ChapterPage = () => {
 
             {/* Next Button */}
             <Box display="flex" justifyContent="center" mt={2}>
-                <Button variant="contained" color="primary" onClick={handleNext}>
-                    Next Flashcard
+                <Button variant="contained" color="primary" onClick={handlePrevious} sx={{ mr: 2 }}>
+                    <ChevronLeftIcon/>
+                </Button>
+                <Typography variant="body1" sx={{ mx: 2 }}>
+                    {currentIndex + 1} / {flashcards.length}
+                </Typography>
+                <Button variant="contained" color="primary" onClick={handleNext} sx={{ ml: 2 }}>
+                    <ChevronRightIcon/>
                 </Button>
             </Box>
+        </Box>
         </Container>
     );
 };
