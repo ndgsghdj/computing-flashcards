@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // For navigation to chapter page
-import { Container, Grid, Card, CardContent, Typography, Box } from '@mui/material';
+import { Container, Grid, Card, CardContent, Typography, Box, CircularProgress } from '@mui/material';
 import { useFlashcards } from '../providers/FlashcardProvider';
 
 import MemoryIcon from '@mui/icons-material/Memory';
@@ -32,8 +32,16 @@ const chapterIcons = {
 }
 
 const Dashboard = () => {
-    const { chapters } = useFlashcards();
+    const { chapters, loading } = useFlashcards();
     const navigate = useNavigate();
+    
+    if (loading) {
+        return (
+            <Container sx={{ padding: "20px", display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                <CircularProgress/>
+            </Container>
+        );
+    }
     return (
         <Container sx={{ padding: "20px" }}>
         <Box sx={{ padding: "20px" }}>
