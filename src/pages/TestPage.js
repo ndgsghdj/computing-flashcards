@@ -84,7 +84,7 @@ const TestPage = () => {
                     sx={{
                         marginBottom: 5,
                         '& .MuiOutlinedInput-root': {
-                            backgroundColor: '#313244', // Set background color
+                            backgroundColor: 'background_darker', // Set background color
                             borderRadius: '12px', // Ensure rounded borders
                             '& fieldset': {
                                 borderColor: '#4b4b4d', // Optional: border color

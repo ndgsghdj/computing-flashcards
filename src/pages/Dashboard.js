@@ -1,6 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';  // For navigation to chapter page
-import { Container, Grid, Card, CardContent, Typography, Box, CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom'; 
+import { Container, Grid, Card, CardContent, Typography, Box, CircularProgress, Button } from '@mui/material';
 import { useFlashcards } from '../providers/FlashcardProvider';
 
 import MemoryIcon from '@mui/icons-material/Memory';
@@ -31,7 +31,7 @@ const chapterIcons = {
     "Computer Networks": <HubIcon color="primary"/>
 }
 
-const Dashboard = () => {
+const Dashboard = ({ toggleTheme, isCatppuccin }) => {
     const { chapters, loading } = useFlashcards();
     const navigate = useNavigate();
     
@@ -42,41 +42,44 @@ const Dashboard = () => {
             </Container>
         );
     }
+    
     return (
         <Container sx={{ padding: "20px" }}>
-        <Box sx={{ padding: "20px" }}>
-        <Typography variant="h4" component="h1" gutterBottom align="center">
-        Chapters
-        </Typography>
-        </Box>
-
-        <Grid container spacing={3}>
-        {Object.keys(chapters).map((chapter, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card 
-            onClick={() => {
-                navigate(`/chapter/${chapter}`)
-            }}
-            sx={{ 
-                textDecoration: 'none', 
-                    width: 300,
-                    height: 180,
-                    ':hover': { boxShadow: 3, backgroundColor: '#302d41' }, // Soft hover effect
-                    padding: '10px', 
-                    backgroundColor: '#302d41',  // Card background (darker shade)
-                    color: '#cdd6f4'  // Light text color
-            }}>
-            {chapterIcons[chapter]}
-            <CardContent>
-                <Typography variant="h5" component="h2" color="primary">
-                    {chapter}
+            <Box sx={{ padding: "20px", textAlign: 'center' }}>
+                <Typography variant="h4" component="h1" gutterBottom>
+                    Chapters
                 </Typography>
-            </CardContent>
-            </Card>
+                <Button variant="contained" onClick={toggleTheme}>
+                    Switch to {isCatppuccin ? 'Gruvbox' : 'Catppuccin'}
+                </Button>
+            </Box>
 
+            <Grid container spacing={3}>
+                {Object.keys(chapters).map((chapter, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                        <Card 
+                            onClick={() => {
+                                navigate(`/chapter/${chapter}`)
+                            }}
+                            sx={{ 
+                                textDecoration: 'none', 
+                                width: 300,
+                                height: 180,
+                                ':hover': { boxShadow: 3, backgroundColor: 'background' }, // Soft hover effect
+                                padding: '10px', 
+                                backgroundColor: 'background',  // Card background (darker shade)
+                                color: 'secondary'  // Light text color
+                            }}>
+                            {chapterIcons[chapter]}
+                            <CardContent>
+                                <Typography variant="h5" component="h2" color="primary">
+                                    {chapter}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
             </Grid>
-        ))}
-        </Grid>
         </Container>
     );
 };

@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { useFlashcards } from '../providers/FlashcardProvider';
 import { Link } from 'react-router-dom';
-import './FlashcardStyles.css'; // Import CSS for the flip animation
+import Flashcard from './Flashcard';
 
 const ChapterPage = () => {
     const { chapterName } = useParams();  // Get chapter name from URL
@@ -54,31 +54,12 @@ const ChapterPage = () => {
                 </Box>
             </Box>
 
-            {/* Flashcard view */}
-            <Box display="flex" justifyContent="center">
-                <Box
-                    className={`card ${isFlipped ? 'side' : ''}`} // Add flip class based on state
-                    onClick={handleFlip}
-                >
-                    {/* Front face */}
-                    <Box className="front">
-                        <CardContent>
-                            <Typography variant="h5" component="h2" sx={{ textAlign: 'center' }}>
-                                {flashcards[currentIndex]?.Keyword}
-                            </Typography>
-                        </CardContent>
-                    </Box>
-
-                    {/* Back face */}
-                    <Box className="back">
-                        <CardContent>
-                            <Typography variant="body1" sx={{ textAlign: 'center' }}>
-                                {flashcards[currentIndex]?.Definition}
-                            </Typography>
-                        </CardContent>
-                    </Box>
-                </Box>
-            </Box>
+            <Flashcard 
+                keyword={flashcards[currentIndex]?.Keyword}
+                definition={flashcards[currentIndex]?.Definition}
+                onClick={handleFlip}
+                isFlipped={isFlipped}
+            />
 
             {/* Next Button */}
             <Box display="flex" justifyContent="center" mt={2}>

@@ -1,12 +1,10 @@
 .card {
     margin: 10px auto;
-    background: #302d41; /* Use your front face color */
     height: 500px;
     width: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #f5e0dc; /* Use your text color */
     font-size: 24px;
     font-weight: 400;
     border-radius: 12px; /* Match your previous border radius */
