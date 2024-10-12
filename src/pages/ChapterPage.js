@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';  // To get the chapter name from URL
-import { Container,
-    Grid,
+import {
+    Container,
+    Box,
+    Button,
     Card,
     CardContent,
     Typography,
-    Box,
-    Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
 } from '@mui/material';
 import { useFlashcards } from '../providers/FlashcardProvider';
 import { Link } from 'react-router-dom';
+import './FlashcardStyles.css'; // Import CSS for the flip animation
 
 const ChapterPage = () => {
     const { chapterName } = useParams();  // Get chapter name from URL
@@ -21,19 +18,18 @@ const ChapterPage = () => {
 
     const flashcards = chapters[chapterName];  // Get flashcards for the selected chapter
 
-    const [open, setOpen] = useState(false); // State to control dialog
-    const [selectedCard, setSelectedCard] = useState(null); // State to store the selected card
+    const [currentIndex, setCurrentIndex] = useState(0); // State to track the current flashcard index
+    const [isFlipped, setIsFlipped] = useState(false); // State to track if the card is flipped
 
-    // Handle card click to open dialog
-    const handleClickOpen = (card) => {
-        setSelectedCard(card);
-        setOpen(true);
+    // Handle flipping the card
+    const handleFlip = () => {
+        setIsFlipped(prev => !prev);
     };
 
-    // Close the dialog
-    const handleClose = () => {
-        setOpen(false);
-        setSelectedCard(null);
+    // Move to the next flashcard
+    const handleNext = () => {
+        setIsFlipped(false); // Reset flip state
+        setCurrentIndex(prev => (prev + 1) % flashcards.length); // Move to the next card, wrap around
     };
 
     if (!flashcards) {
@@ -42,7 +38,7 @@ const ChapterPage = () => {
 
     return (
         <Container sx={{ padding: "20px" }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
                 <Typography variant="h4" component="h1">
                     {chapterName}
                 </Typography>
@@ -58,70 +54,38 @@ const ChapterPage = () => {
                 </Box>
             </Box>
 
-        <Grid container rowSpacing={5} columnSpacing={4}>
-        {flashcards.map((card, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card sx={{ 
-                width: 300,              // Fixed width
-                    height: 180,             // Fixed height
-                    padding: '10px', 
-                    backgroundColor: '#302d41', 
-                    boxShadow: 1, 
-                    color: '#f5e0dc', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    justifyContent: 'space-between'
-            }}
-            onClick={() => handleClickOpen(card)}
-            >
-            <CardContent>
-            <Typography 
-            variant="h6" 
-            component="h3" 
-            color="primary"
-            sx={{
-                overflow: 'hidden', 
-                    textOverflow: 'ellipsis', 
-                    whiteSpace: 'nowrap'  // Keeps text on one line with ellipsis
-            }}
-            >
-            {card.Keyword}
-            </Typography>
-            <Typography 
-            variant="body2" 
-            color="secondary"
-            sx={{
-                overflow: 'hidden', 
-                    textOverflow: 'ellipsis', 
-                    display: '-webkit-box', 
-                    WebkitLineClamp: 3,   // Limits text to 3 lines
-                    WebkitBoxOrient: 'vertical', 
-                    whiteSpace: 'normal'  // Allows text to wrap within the line clamp
-            }}
-            >
-            {card.Definition}
-            </Typography>
-            </CardContent>
-            </Card>
+            {/* Flashcard view */}
+            <Box display="flex" justifyContent="center">
+                <Box
+                    className={`card ${isFlipped ? 'side' : ''}`} // Add flip class based on state
+                    onClick={handleFlip}
+                >
+                    {/* Front face */}
+                    <Box className="front">
+                        <CardContent>
+                            <Typography variant="h5" component="h2" sx={{ textAlign: 'center' }}>
+                                {flashcards[currentIndex]?.Keyword}
+                            </Typography>
+                        </CardContent>
+                    </Box>
 
-            </Grid>
-        ))}
+                    {/* Back face */}
+                    <Box className="back">
+                        <CardContent>
+                            <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                                {flashcards[currentIndex]?.Definition}
+                            </Typography>
+                        </CardContent>
+                    </Box>
+                </Box>
+            </Box>
 
-        {/* Dialog for full flashcard view */}
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle>{selectedCard?.Keyword}</DialogTitle>
-        <DialogContent>
-        <Typography variant="body1" color="text.primary">
-        {selectedCard?.Definition}
-        </Typography>
-        </DialogContent>
-        <DialogActions>
-        <Button onClick={handleClose} color="primary">
-        Close
-        </Button>
-        </DialogActions>
-        </Dialog>
-        </Grid>
+            {/* Next Button */}
+            <Box display="flex" justifyContent="center" mt={2}>
+                <Button variant="contained" color="primary" onClick={handleNext}>
+                    Next Flashcard
+                </Button>
+            </Box>
         </Container>
     );
 };

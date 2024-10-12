@@ -4,7 +4,10 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import { FlashcardProvider } from './providers/FlashcardProvider';
+
 import ChapterPage from './pages/ChapterPage';
+import TestPage from './pages/TestPage'
+import TransitionWrapper from './components/TransitionWrapper'
 
 const theme = createTheme({
   palette: {
@@ -55,10 +58,13 @@ function App() {
       <CssBaseline /> {/* Ensures modern base styling */}
       <FlashcardProvider>
         <Router>
+            <TransitionWrapper>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/chapter/:chapterName" element={<ChapterPage />} />  {/* Dynamic routing for each chapter */}
+            <Route path="/test/:chapterName" element={<TestPage />} />
           </Routes>
+            </TransitionWrapper>
         </Router>
       </FlashcardProvider>
     </ThemeProvider>

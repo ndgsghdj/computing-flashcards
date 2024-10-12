@@ -1,0 +1,41 @@
+.card {
+    margin: 10px auto;
+    background: #302d41; /* Use your front face color */
+    height: 500px;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #f5e0dc; /* Use your text color */
+    font-size: 24px;
+    font-weight: 400;
+    border-radius: 12px; /* Match your previous border radius */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1), 
+                0px 4px 8px rgba(0, 0, 0, 0.1),
+                0px 8px 16px rgba(0, 0, 0, 0.1), 
+                0px 16px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+    cursor: pointer;
+    transition: 250ms;
+    transform-style: preserve-3d;
+}
+
+.card.side {
+    transform: rotateY(180deg); /* Flip the card */
+}
+
+.card .front,
+.card .back {
+    position: absolute;
+    padding: 1rem;
+    backface-visibility: hidden; /* Hide the back when showing the front */
+}
+
+.card .front {
+    transform: rotateY(0deg); /* No rotation for the front */
+}
+
+.card .back {
+    transform: rotateY(180deg); /* Rotate the back face */
+}
+
