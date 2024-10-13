@@ -1,6 +1,5 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import StyleIcon from '@mui/icons-material/Style';
 
 import Flashcard from './Flashcard';
 import GridView from './GridView';

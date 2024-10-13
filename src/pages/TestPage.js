@@ -1,11 +1,16 @@
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Container, Typography, TextField, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Container, Typography, TextField, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions, useTheme } from '@mui/material';
 import { useFlashcards } from '../providers/FlashcardProvider';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './TestPage.css'; // Import CSS for animations
 
 const TestPage = () => {
+    const theme = useTheme();
+
     const { chapterName } = useParams(); // Get chapter name from URL
     const { chapters } = useFlashcards(); // Access flashcards from context
     const flashcards = chapters[chapterName]; // Get flashcards for the selected chapter
@@ -118,7 +123,7 @@ const TestPage = () => {
         Submit
         </Button>
         <Button variant="contained" onClick={handleNextKeyword} sx={{ flex: "1", marginX: 1 }}>
-        Next Keyword
+            Next
         </Button>
         {/* Link back to chapter */}
         <Button component={Link} to={`/chapter/${chapterName}`} variant="contained" sx={{ flex: "1", marginLeft: 1 }}>
@@ -130,22 +135,25 @@ const TestPage = () => {
 
         {/* Display results */}
         {results && (
-            <Box mt={4} sx={{ width: "100%", maxWidth: "600px" }}>
+            <Box mt={4} sx={{ width: "100%", maxWidth: "600px", overflow: "auto", wordWrap: "break-word", whiteSpace: "normal" }}>
             <Typography variant="h6">Your Results:</Typography>
             <Typography variant="body1">
             {results.totalWords.map((word, index) => {
                 const isCorrect = results.correctWords.includes(word);
                 return (
-                    <span
+                    <Typography
                     key={index}
-                    style={{
+                    variant="body1"
+                    component="span"
+                    sx={{
+                        display: 'inline',
                         color: isCorrect ? 'green' : '#aaa',
-                            textDecoration: isCorrect ? 'none' : 'line-through',
-                            marginRight: '5px'
+                        textDecoration: isCorrect ? 'none' : 'line-through',
+                        marginRight: '5px'
                     }}
                     >
                     {word}
-                    </span>
+                    </Typography>
                 );
             })}
             </Typography>

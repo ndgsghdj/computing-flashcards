@@ -22,6 +22,9 @@ const kanagawaTheme = createTheme({
             primary: '#e2cca9', // Light text
             secondary: '#d3b58d', // Subtle text
         },
+        success: {
+            main: '#87a987'
+        }
     },
     typography: {
         fontFamily: `'SF Mono', 'Roboto', sans-serif`,
