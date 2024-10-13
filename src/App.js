@@ -10,12 +10,16 @@ import { useFlashcards } from './providers/FlashcardProvider';
 // Import your theme files
 import catppuccinTheme from './themes/catppuccinTheme'; // Adjust the path if needed
 import gruvboxTheme from './themes/gruvboxTheme'; // Adjust the path if needed
+import tokyoNightTheme from './themes/tokyonightTheme'
+import kanagawaTheme from './themes/kanagawaTheme';
 // Import other themes here as needed
 
 const App = () => {
     const themes = {
         catppuccin: catppuccinTheme,
         gruvbox: gruvboxTheme,
+        tokyonight: tokyoNightTheme,
+        kanagawa: kanagawaTheme
         // Add other themes here
     };
 
