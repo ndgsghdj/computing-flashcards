@@ -24,8 +24,6 @@ const ChapterPage = () => {
     const [open, setOpen] = useState(false)
     const [selectedCard, setSelectedCard] = useState(null)
 
-
-
     const handleChangeView = () => {
         setFlashCardView(flashCardView => !flashCardView)
     }
@@ -57,12 +55,14 @@ const ChapterPage = () => {
     
     useEffect(() => {
         const handleKeyDown = (event) => {
-            if (event.key === 'ArrowRight') {
+            if (event.key === 'h' || event.key === 'ArrowLeft') {
                 setIsFlipped(false); // Reset flip state
                 setCurrentIndex(prev => (prev + 1) % flashcards.length);  // Move to next card, wrap around
-            } else if (event.key === 'ArrowLeft') {
+            } else if (event.key === 'l' || event.key === 'ArrowRight') {
                 setIsFlipped(false);
                 setCurrentIndex(prev => (prev - 1 + flashcards.length) % flashcards.length);  // Move to previous card, wrap around
+            } else if (event.key === 'Enter') {
+                setIsFlipped(isFlipped => !isFlipped)
             }
         };
 
