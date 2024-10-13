@@ -11,6 +11,7 @@ import {
 import { useFlashcards } from '../providers/FlashcardProvider';
 import { Link } from 'react-router-dom';
 import Flashcard from './Flashcard';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -65,13 +66,20 @@ const ChapterPage = () => {
 
         <Box 
         >
-
-            <Flashcard 
-                keyword={flashcards[currentIndex]?.Keyword}
-                definition={flashcards[currentIndex]?.Definition}
-                onClick={handleFlip}
-                isFlipped={isFlipped}
-            />
+            <SwitchTransition mode="out-in">
+                <CSSTransition
+                    key={currentIndex}
+                    timeout={100}
+                    classNames="flashcard-transition"
+                >
+                    <Flashcard 
+                        keyword={flashcards[currentIndex]?.Keyword}
+                        definition={flashcards[currentIndex]?.Definition}
+                        onClick={handleFlip}
+                        isFlipped={isFlipped}
+                    />
+                </CSSTransition>
+            </SwitchTransition>
 
             {/* Next Button */}
             <Box display="flex" justifyContent="center" mt={2}>

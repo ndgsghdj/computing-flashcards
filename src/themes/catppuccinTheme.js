@@ -4,11 +4,9 @@ const catppuccinTheme = createTheme({
     palette: {
         primary: {
             main: '#cba6f7',
-            hover: '#d4b5f8', // Hover color for primary
         },
         secondary: {
             main: '#f38ba8',
-            hover: '#f59cb0', // Hover color for secondary
         },
         flashcard: {
             main: '#f5e0dc', // Color for flashcards
@@ -18,7 +16,7 @@ const catppuccinTheme = createTheme({
             paper: '#302d41',
         },
         background_darker: {
-            default: '#302d41',
+            default: '#181825',
         },
         text: {
             primary: '#cdd6f4',
@@ -49,6 +47,26 @@ const catppuccinTheme = createTheme({
         'none',
         '0px 4px 6px rgba(0, 0, 0, 0.1)',
     ],
+    components: {
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    '&:hover': {
+                        backgroundColor: '#d4b5f8', // Hover color for primary
+                    },
+                },
+            },
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    '&:hover': {
+                        backgroundColor: '#313244', // Hover color for secondary or flashcards
+                    },
+                },
+            },
+        },
+    },
 });
 
 export default catppuccinTheme;

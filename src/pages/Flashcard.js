@@ -1,12 +1,17 @@
-import { Box, CardContent, Typography } from "@mui/material";
+import { Box, CardContent, Typography, useTheme } from "@mui/material";
 import './FlashCardStyles.css'; // Import CSS for the flip animation
 
 const Flashcard = ({ keyword, definition, onClick, isFlipped }) => {
+    const theme = useTheme()
+
     return (
         <Box display="flex" justifyContent="center">
                 <Box
                     className={`card ${isFlipped ? 'side' : ''}`} // Add flip class based on state
                     onClick={onClick}
+                    sx={{
+                        backgroundColor: theme.palette.background.paper
+                    }}
                 >
                     {/* Front face */}
                     <Box className="front">
