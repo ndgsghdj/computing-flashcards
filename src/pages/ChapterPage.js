@@ -5,7 +5,7 @@ import Flashcard from './Flashcard';
 import GridView from './GridView';
 
 import GridViewIcon from '@mui/icons-material/GridView';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Box, Button, Typography, } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useFlashcards } from '../providers/FlashcardProvider';
@@ -23,6 +23,8 @@ const ChapterPage = () => {
     const [flashCardView, setFlashCardView] = useState(true)
     const [open, setOpen] = useState(false)
     const [selectedCard, setSelectedCard] = useState(null)
+
+
 
     const handleChangeView = () => {
         setFlashCardView(flashCardView => !flashCardView)
@@ -52,10 +54,29 @@ const ChapterPage = () => {
         setCurrentIndex(prev => (prev - 1 + flashcards.length) % flashcards.length); // Wrap around if negative
     };
 
+    
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'ArrowRight') {
+                setIsFlipped(false); // Reset flip state
+                setCurrentIndex(prev => (prev + 1) % flashcards.length);  // Move to next card, wrap around
+            } else if (event.key === 'ArrowLeft') {
+                setIsFlipped(false);
+                setCurrentIndex(prev => (prev - 1 + flashcards.length) % flashcards.length);  // Move to previous card, wrap around
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown); // Register keydown listener
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown); // Clean up listener on component unmount
+        };
+    }, [flashcards.length, handleNext, handlePrevious]);
 
     if (!flashcards) {
         return <Typography variant="h6">Chapter not found</Typography>;
     }
+
 
     return (
         <Container sx={{ padding: "20px" }}>
