@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider, CssBaseline, Container, CircularProgress } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { FlashcardProvider } from './providers/FlashcardProvider';
 import Dashboard from './pages/Dashboard'; // Adjust the path if needed
 import ChapterPage from './pages/ChapterPage'; // Adjust the path if needed
 import TestPage from './pages/TestPage'; // Adjust the path if needed
