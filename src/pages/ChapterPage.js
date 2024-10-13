@@ -66,7 +66,7 @@ const ChapterPage = () => {
         </Typography>
         <Box display="flex" gap={2}>
         <Button color="secondary" onClick={handleChangeView}>
-        { flashCardView ? <GridViewIcon/> : <Style/> }
+        { flashCardView ? <Style/> : <GridViewIcon/> }
         </Button>
         {/* Test Me button */}
         <Button component={Link} to={`/test/${chapterName}`} variant="contained" color="secondary">
