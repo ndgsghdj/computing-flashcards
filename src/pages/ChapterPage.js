@@ -102,7 +102,15 @@ const ChapterPage = () => {
             variant="contained"
             color="secondary"
           >
-            Test me
+            Test
+          </Button>
+          <Button
+            component={Link}
+            to={`/practise/${chapterName}`}
+            variant="contained"
+            color="secondary"
+          >
+            Practise
           </Button>
           {/* Back to Chapters button */}
           <Button component={Link} to="/" variant="contained">
