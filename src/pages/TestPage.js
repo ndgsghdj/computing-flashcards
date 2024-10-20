@@ -47,7 +47,7 @@ const TestPage = () => {
 
         // Set results only if there are correct words
         setResults({ correctWords, totalWords: keywords });
-        setOpenResultsDialog(true); // Open results dialog if there are results
+        setOpenResultsDialog(true); 
 
         // Move to the next keyword or open completion dialog if it was the last keyword
         if (currentIndex === flashcards.length - 1) {
@@ -83,15 +83,18 @@ const TestPage = () => {
 
         const handleKeyDown = (event) => {
             // Listen for "Enter" key
-            if (event.key === "Enter") {
-                event.preventDefault();
-                if (!openResultsDialog) {
-                    handleSubmit(event);
-                } else if (!openDialog) {
-                    handleCloseResultsDialog();
-                } else {
-                    handleCloseDialog();
-                }
+            // if (event.key === "Enter") {
+                // event.preventDefault();
+                // if (openResultsDialog) {
+                // } else {
+                    // handleCloseDialog();
+                // }
+            // }
+            
+            if (event.key === "Tab" && openResultsDialog) {
+                handleCloseResultsDialog();
+            } else if (event.key === "Tab" && openDialog) {
+                handleCloseDialog();
             }
 
             // Track "g" and "i" key presses
@@ -174,6 +177,12 @@ const TestPage = () => {
         rows={4}
         value={userResponse}
         onChange={(e) => setUserResponse(e.target.value)}
+        onKeyPress={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault()
+                handleSubmit(e)
+            }
+        }}
         required
         inputRef={textFieldRef}
         sx={{
